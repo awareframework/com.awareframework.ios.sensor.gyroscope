@@ -7,14 +7,28 @@
 //
 
 import UIKit
+import com_awareframework_ios_sensor_gyroscope
 
 class ViewController: UIViewController {
 
+    var sensor:GyroscopeSensor?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        sensor = GyroscopeSensor.init(GyroscopeSensor.Config().apply{config in
+            config.debug = true
+            config.sensorObserver = Observer()
+        })
+        sensor?.start()
     }
 
+    class Observer:GyroscopeObserver{
+        func onChanged(data: GyroscopeData) {
+            print(data)
+        }
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

@@ -1,5 +1,5 @@
 import XCTest
-import com.awareframework.ios.sensor.gyroscope
+import com_awareframework_ios_sensor_gyroscope
 
 class Tests: XCTestCase {
     
