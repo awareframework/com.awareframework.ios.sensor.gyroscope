@@ -24,7 +24,7 @@ class ViewController: UIViewController {
     }
 
     class Observer:GyroscopeObserver{
-        func onChanged(data: GyroscopeData) {
+        func onDataChanged(data: GyroscopeData) {
             print(data)
         }
     }

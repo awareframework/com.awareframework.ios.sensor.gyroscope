@@ -15,7 +15,6 @@ public class GyroscopeData: AwareObject {
     @objc dynamic public var x : Double = 0.0
     @objc dynamic public var y : Double = 0.0
     @objc dynamic public var z : Double = 0.0
-    @objc dynamic public var accuracy : Int = 0
     
     public override func toDictionary() -> Dictionary<String, Any> {
         var dict = super.toDictionary()
@@ -23,7 +22,6 @@ public class GyroscopeData: AwareObject {
         dict["y"] = y
         dict["z"] = z
         dict["eventTimestamp"] = eventTimestamp
-        dict["accuracy"] = accuracy
         return dict
     }
 }

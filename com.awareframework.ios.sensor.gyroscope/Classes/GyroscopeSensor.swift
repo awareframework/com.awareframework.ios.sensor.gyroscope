@@ -19,7 +19,7 @@ extension Notification.Name{
 }
 
 public protocol GyroscopeObserver{
-    func onChanged(data:GyroscopeData)
+    func onDataChanged(data:GyroscopeData)
 }
 
 public extension GyroscopeSensor{
@@ -27,18 +27,18 @@ public extension GyroscopeSensor{
     
     public static let ACTION_AWARE_GYROSCOPE = "ACTION_AWARE_GYROSCOPE"
     
-    public static let ACTION_AWARE_GYROSCOPE_START = "com.awareframework.android.sensor.gyroscope.SENSOR_START"
-    public static let ACTION_AWARE_GYROSCOPE_STOP = "com.awareframework.android.sensor.gyroscope.SENSOR_STOP"
+    public static let ACTION_AWARE_GYROSCOPE_START = "com.awareframework.gyroscope.SENSOR_START"
+    public static let ACTION_AWARE_GYROSCOPE_STOP = "com.awareframework.gyroscope.SENSOR_STOP"
     
-    public static let ACTION_AWARE_GYROSCOPE_SET_LABEL = "com.awareframework.android.sensor.gyroscope.ACTION_AWARE_GYROSCOPE_SET_LABEL"
+    public static let ACTION_AWARE_GYROSCOPE_SET_LABEL = "com.awareframework.gyroscope.ACTION_AWARE_GYROSCOPE_SET_LABEL"
     public static let EXTRA_LABEL = "label"
     
-    public static let ACTION_AWARE_GYROSCOPE_SYNC = "com.awareframework.android.sensor.gyroscope.SENSOR_SYNC"
+    public static let ACTION_AWARE_GYROSCOPE_SYNC = "com.awareframework.gyroscope.SENSOR_SYNC"
 }
 
 public class GyroscopeSensor: AwareSensor {
     
-    var CONFIG = GyroscopeSensor.Config()
+    public var CONFIG = GyroscopeSensor.Config()
     var motion = CMMotionManager()
     var LAST_DATA:CMGyroData?
     var LAST_TS:Double   = 0.0
@@ -114,7 +114,7 @@ public class GyroscopeSensor: AwareSensor {
                     data.eventTimestamp = Int64(gyroData.timestamp*1000)
                 
                     if let observer = self.CONFIG.sensorObserver {
-                        observer.onChanged(data: data)
+                        observer.onDataChanged(data: data)
                     }
                     
                     self.dataBuffer.append(data)
