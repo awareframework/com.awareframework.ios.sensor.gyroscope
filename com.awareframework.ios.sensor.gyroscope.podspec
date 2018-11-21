@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'com.awareframework.ios.sensor.gyroscope'
   s.version          = '0.1.1'
-  s.summary          = 'A short description of com.awareframework.ios.sensor.gyroscope.'
+  s.summary          = 'com.awareframework.ios.sensor.gyroscope (Gyroscope) is a sensor module of Aware Framework.'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -18,7 +18,8 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+com.awareframework.ios.sensor.gyroscope (Gyroscope) is a sensor module of Aware Framework. This module provides Gyroscope data, indicating the instantaneous rotation around the device's three primary axes.
+https://developer.apple.com/documentation/coremotion/getting_raw_gyroscope_events
                        DESC
 
   s.homepage         = 'https://github.com/awareframework/com.awareframework.ios.sensor.gyroscope'
@@ -30,7 +31,7 @@ TODO: Add long description of the pod here.
 
   s.ios.deployment_target = '10.0'
 
-  s.swift_version = '4.0'
+  s.swift_version = '4.2'
 
   s.source_files = 'com.awareframework.ios.sensor.gyroscope/Classes/**/*'
   
