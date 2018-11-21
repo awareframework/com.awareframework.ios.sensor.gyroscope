@@ -24,13 +24,13 @@ TODO: Add long description of the pod here.
   s.homepage         = 'https://github.com/awareframework/com.awareframework.ios.sensor.gyroscope'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'Apache2', :file => 'LICENSE' }
-  s.author           = { 'tetujin' => 'tetujin@ht.sfc.keio.ac.jp' }
+  s.author           = { 'Yuuki Nishiyama' => 'yuuki.nishiyama@oulu.fi' }
   s.source           = { :git => 'https://github.com/awareframework/com.awareframework.ios.sensor.gyroscope.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '10.0'
 
-  s.swift_version = '4.0'
+  # s.swift_version = '4.0'
 
   s.source_files = 'com.awareframework.ios.sensor.gyroscope/Classes/**/*'
   

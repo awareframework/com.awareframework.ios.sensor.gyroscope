@@ -41,7 +41,7 @@ Class to hold the configuration of the sensor.
 #### Fields
 + `sensorObserver: GyroscopeObserver`: Callback for live data updates.
 + `frequency: Int`: Data samples to collect per second (Hz). (default = 5)
-+ `period: Float`: Period to save data in minutes. (default = 1)
++ `period: Double`: Period to save data in minutes. (default = 1)
 + `threshold: Double`: If set, do not record consecutive points if change in value is less than the set value.
 + `enabled: Boolean` Sensor is enabled or not. (default = `false`)
 + `debug: Boolean` enable/disable logging to Xcode console. (default = `false`)
@@ -73,13 +73,13 @@ Contains the raw sensor data.
 
 | Field     | Type   | Description                                                     |
 | --------- | ------ | --------------------------------------------------------------- |
-| x         | Float  | value of X axis                                                 |
-| y         | Float  | value of Y axis                                                 |
-| z         | Float  | value of Z axis                                                 |
+| x         | Double  | value of X axis                                                 |
+| y         | Double  | value of Y axis                                                 |
+| z         | Double  | value of Z axis                                                 |
 | label     | String | Customizable label. Useful for data calibration or traceability |
 | deviceId  | String | AWARE device UUID                                               |
 | label     | String | Customizable label. Useful for data calibration or traceability |
-| timestamp | Long   | unixtime milliseconds since 1970                                |
+| timestamp | Int64   | unixtime milliseconds since 1970                                |
 | timezone  | Int    | Raw timezone offset of the device                          |
 | os        | String | Operating system of the device (ex. ios)                    |
 
