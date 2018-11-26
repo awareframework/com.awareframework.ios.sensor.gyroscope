@@ -1,13 +1,16 @@
-# Aware Gyroscope
+# AWARE: Gyroscope
 
 [![CI Status](https://img.shields.io/travis/awareframework/com.awareframework.ios.sensor.gyroscope.svg?style=flat)](https://travis-ci.org/awareframework/com.awareframework.ios.sensor.gyroscope)
 [![Version](https://img.shields.io/cocoapods/v/com.awareframework.ios.sensor.gyroscope.svg?style=flat)](https://cocoapods.org/pods/com.awareframework.ios.sensor.gyroscope)
 [![License](https://img.shields.io/cocoapods/l/com.awareframework.ios.sensor.gyroscope.svg?style=flat)](https://cocoapods.org/pods/com.awareframework.ios.sensor.gyroscope)
 [![Platform](https://img.shields.io/cocoapods/p/com.awareframework.ios.sensor.gyroscope.svg?style=flat)](https://cocoapods.org/pods/com.awareframework.ios.sensor.gyroscope)
 
-## Example
+This sensor module allows us to retrieve data from the onboard gyroscopes. The data is provided by iOS Core Motion Library. Please check the link below for details. 
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+> A gyroscope measures the rate at which a device rotates around a spatial axis. Many iOS devices have a three-axis gyroscope, which delivers rotation values in each of the three axes. Rotation values are measured in radians per second around the given axis. Rotation values may be positive or negative depending on the direction of rotation.
+
+[ Apple | Getting Raw Gyroscope Events ] (https://developer.apple.com/documentation/coremotion/getting_raw_gyroscope_events)
+[ Apple | Core Motion | CMGyroData ] (https://developer.apple.com/documentation/coremotion/cmgyrodata)
 
 ## Requirements
 iOS 10 or later
@@ -73,9 +76,9 @@ Contains the raw sensor data.
 
 | Field     | Type   | Description                                                     |
 | --------- | ------ | --------------------------------------------------------------- |
-| x         | Double  | value of X axis                                                 |
-| y         | Double  | value of Y axis                                                 |
-| z         | Double  | value of Z axis                                                 |
+| x         | Double  | The value for the X-axis.                                                |
+| y         | Double  | The value for the Y-axis.                                            |
+| z         | Double  | The value for the Z-axis.                                               |
 | label     | String | Customizable label. Useful for data calibration or traceability |
 | deviceId  | String | AWARE device UUID                                               |
 | label     | String | Customizable label. Useful for data calibration or traceability |

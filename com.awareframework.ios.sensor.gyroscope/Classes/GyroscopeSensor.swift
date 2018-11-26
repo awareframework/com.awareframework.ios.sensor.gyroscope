@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SwiftyJSON
 import CoreMotion
 import com_awareframework_ios_sensor_core
 
@@ -50,20 +49,29 @@ public class GyroscopeSensor: AwareSensor {
          * The defualt value of Android is 200000 microsecond.
          * The value means 5Hz
          */
-        public var frequency:Double  = 5 // Hz
+        public var frequency:Int  = 5 // Hz
         public var period:Double     = 0 // min
         /**
          * Accelerometer threshold (Double).  Do not record consecutive points if
          * change in value of all axes is less than this.
          */
         public var threshold: Double = 0
+        
         public var sensorObserver:GyroscopeObserver?
         
-        
-        public override init(){}
-        
-        public init(_ json:JSON){
+        public convenience init( _ config:Dictionary<String, Any>){
+            self.init()
+            if let frequency = config["frequency"] as? Int {
+                self.frequency = frequency
+            }
             
+            if let period = config["period"] as? Double {
+                self.period = period
+            }
+            
+            if let threshold = config["threshold"] as? Double {
+                self.threshold = threshold
+            }
         }
         
         public func apply(closure: (_ config: GyroscopeSensor.Config) -> Void) -> Self{
@@ -86,7 +94,7 @@ public class GyroscopeSensor: AwareSensor {
     
     public override func start() {
         if self.motion.isGyroAvailable {
-            self.motion.gyroUpdateInterval = 1.0/CONFIG.frequency
+            self.motion.gyroUpdateInterval = 1.0/Double(CONFIG.frequency)
             self.motion.startGyroUpdates(to: .main) { (gyroScopeData, error) in
                 if let gyroData = gyroScopeData{
                     let x = gyroData.rotationRate.x
