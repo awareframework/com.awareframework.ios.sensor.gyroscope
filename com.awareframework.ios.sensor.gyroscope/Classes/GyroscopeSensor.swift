@@ -59,8 +59,10 @@ public class GyroscopeSensor: AwareSensor {
         
         public var sensorObserver:GyroscopeObserver?
         
-        public convenience init( _ config:Dictionary<String, Any>){
-            self.init()
+        public override func set(config: Dictionary<String, Any>) {
+            
+            super.set(config: config)
+            
             if let frequency = config["frequency"] as? Int {
                 self.frequency = frequency
             }
@@ -81,7 +83,7 @@ public class GyroscopeSensor: AwareSensor {
         
     }
     
-    override convenience init(){
+    public override convenience init(){
         self.init(GyroscopeSensor.Config())
     }
     

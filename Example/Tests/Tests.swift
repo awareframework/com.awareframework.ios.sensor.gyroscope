@@ -22,7 +22,7 @@ class Tests: XCTestCase {
         
         let frequency = 1;
         let threshold = 0.5;
-        let period = 1.0;
+        let period    = 1.0;
         let config :Dictionary<String,Any> = ["frequency":frequency, "threshold":threshold, "period":period]
         
         var sensor = GyroscopeSensor.init(GyroscopeSensor.Config(config));
@@ -34,7 +34,13 @@ class Tests: XCTestCase {
             config.frequency = frequency
             config.threshold = threshold
             config.period = period
-        } );
+        });
+        XCTAssertEqual(frequency, sensor.CONFIG.frequency)
+        XCTAssertEqual(threshold, sensor.CONFIG.threshold)
+        XCTAssertEqual(period, sensor.CONFIG.period)
+        
+        sensor = GyroscopeSensor.init()
+        sensor.CONFIG.set(config: config)
         XCTAssertEqual(frequency, sensor.CONFIG.frequency)
         XCTAssertEqual(threshold, sensor.CONFIG.threshold)
         XCTAssertEqual(period, sensor.CONFIG.period)
