@@ -159,7 +159,7 @@ public class GyroscopeSensor: AwareSensor {
     
     public override func sync(force: Bool = false) {
         if let engine = self.dbEngine{
-            engine.startSync(GyroscopeData.TABLE_NAME, DbSyncConfig.init().apply{ config in
+            engine.startSync(GyroscopeData.TABLE_NAME, GyroscopeData.self, DbSyncConfig.init().apply{ config in
                 
             })
             self.notificationCenter.post(name: .actionAwareGyroscopeSync, object:nil)
