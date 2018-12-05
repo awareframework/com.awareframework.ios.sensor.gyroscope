@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'com.awareframework.ios.sensor.gyroscope'
-  s.version       = '0.2.1'
+  s.version       = '0.2.2'
   s.summary          = 'A Gyroscope Sensor Module for AWARE Framework.'
 
 # This description is used to generate tags and improve search results.
@@ -42,6 +42,6 @@ https://developer.apple.com/documentation/coremotion/getting_raw_gyroscope_event
   # s.public_header_files = 'Pod/Classes/**/*.h'
   s.frameworks = 'CoreMotion' 
   
-  s.dependency 'com.awareframework.ios.sensor.core', '~> 0.3.1'
+  s.dependency 'com.awareframework.ios.sensor.core', '~> 0.3.3'
   
 end

@@ -26,13 +26,13 @@ public extension GyroscopeSensor{
     
     public static let ACTION_AWARE_GYROSCOPE = "ACTION_AWARE_GYROSCOPE"
     
-    public static let ACTION_AWARE_GYROSCOPE_START = "com.awareframework.gyroscope.SENSOR_START"
-    public static let ACTION_AWARE_GYROSCOPE_STOP = "com.awareframework.gyroscope.SENSOR_STOP"
+    public static let ACTION_AWARE_GYROSCOPE_START = "com.awareframework.ios.sensor.gyroscope.SENSOR_START"
+    public static let ACTION_AWARE_GYROSCOPE_STOP = "com.awareframework.ios.sensor.gyroscope.SENSOR_STOP"
     
-    public static let ACTION_AWARE_GYROSCOPE_SET_LABEL = "com.awareframework.gyroscope.ACTION_AWARE_GYROSCOPE_SET_LABEL"
+    public static let ACTION_AWARE_GYROSCOPE_SET_LABEL = "com.awareframework.ios.sensor.gyroscope.ACTION_AWARE_GYROSCOPE_SET_LABEL"
     public static let EXTRA_LABEL = "label"
     
-    public static let ACTION_AWARE_GYROSCOPE_SYNC = "com.awareframework.gyroscope.SENSOR_SYNC"
+    public static let ACTION_AWARE_GYROSCOPE_SYNC = "com.awareframework.ios.sensor.gyroscope.SENSOR_SYNC"
 }
 
 public class GyroscopeSensor: AwareSensor {
@@ -164,5 +164,10 @@ public class GyroscopeSensor: AwareSensor {
             })
             self.notificationCenter.post(name: .actionAwareGyroscopeSync, object:nil)
         }
+    }
+    
+    public func set(label:String) {
+        self.CONFIG.label = label
+        self.notificationCenter.post(name: .actionAwareGyroscopeSetLabel, object:nil, userInfo:[GyroscopeSensor.EXTRA_LABEL:label])
     }
 }

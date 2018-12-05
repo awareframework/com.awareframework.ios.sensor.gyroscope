@@ -14,13 +14,13 @@ class ViewController: UIViewController {
     var sensor:GyroscopeSensor?
     
     override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        sensor = GyroscopeSensor.init(GyroscopeSensor.Config().apply{config in
-            config.debug = true
-            config.sensorObserver = Observer()
-        })
-        sensor?.start()
+//        super.viewDidLoad()
+//        // Do any additional setup after loading the view, typically from a nib.
+//        sensor = GyroscopeSensor.init(GyroscopeSensor.Config().apply{config in
+//            config.debug = true
+//            config.sensorObserver = Observer()
+//        })
+//        sensor?.start()
     }
 
     class Observer:GyroscopeObserver{
