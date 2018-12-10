@@ -1,6 +1,7 @@
 import XCTest
 import RealmSwift
 import com_awareframework_ios_sensor_gyroscope
+import com_awareframework_ios_sensor_core
 
 class Tests: XCTestCase {
     
@@ -15,84 +16,6 @@ class Tests: XCTestCase {
         super.tearDown()
     }
     
-    func testSensingFrequency(){
-        
-        #if targetEnvironment(simulator)
-        print("This test requires a real device.")
-        
-        #else
-        /////////// 30 FPS //////
-        let sensor = GyroscopeSensor.init(GyroscopeSensor.Config().apply{ config in
-            config.debug = true
-            config.dbType = .REALM
-            config.frequency = 30
-        })
-        sensor.start() // start sensor
-        let expect = expectation(description: "Sensing test (30FPS)")
-        let observer = NotificationCenter.default.addObserver(forName: Notification.Name.actionAwareGyroscope, object: nil, queue: .main) { (notification) in
-            sensor.stop() // stop sensor
-            if let engine = sensor.dbEngine {
-                if let results =  engine.fetch(GyroscopeData.TABLE_NAME, GyroscopeData.self, nil) as? Results<Object>{
-                    print(results.count)
-                    let idealCount = sensor.CONFIG.frequency
-                    if results.count >= (idealCount-1) && results.count <= (idealCount+1) {
-                        expect.fulfill()
-                    }else{
-                        XCTFail()
-                    }
-                    engine.removeAll()
-                }
-            }
-        }
-        wait(for: [expect], timeout: 3)
-        NotificationCenter.default.removeObserver(observer)
-        
-        ///////// 1 FPS ////////
-        let sensor2 = GyroscopeSensor.init(GyroscopeSensor.Config().apply{ config in
-            config.debug = true
-            config.dbType = .REALM
-            config.frequency = 1
-        })
-        sensor2.start() // start sensor
-        let expect2 = expectation(description: "Sensing test (1 FPS)")
-        NotificationCenter.default.addObserver(forName: Notification.Name.actionAwareGyroscope, object: nil, queue: .main) { (notification) in
-            sensor2.stop() // stop sensor
-            if let engine = sensor2.dbEngine {
-                if let results =  engine.fetch(GyroscopeData.TABLE_NAME, GyroscopeData.self, nil) as? Results<Object>{
-                    print(results.count)
-                    let idealCount = sensor2.CONFIG.frequency
-                    if results.count >= (idealCount-1) && results.count <= (idealCount+1) {
-                        expect2.fulfill()
-                    }else{
-                        XCTFail()
-                    }
-                    engine.removeAll()
-                }
-            }
-        }
-        wait(for: [expect2], timeout: 3)
-        
-        #endif
-    }
-    
-    func testSync(){
-        //        let sensor = GyroscopeSensor.init(GyroscopeSensor.Config().apply{ config in
-        //            config.debug = true
-        //            config.dbType = .REALM
-        //            config.dbHost = "node.awareframework.com/dgc"
-        //        })
-        //        sensor.start();
-        //        sensor.enable();
-        //        sensor.sync(force: true)
-        
-        //        let syncManager = DbSyncManager.Builder()
-        //            .setBatteryOnly(false)
-        //            .setWifiOnly(false)
-        //            .setSyncInterval(1)
-        //            .build()
-        //
-        //        syncManager.start()
-    }
     
     func testObserver(){
         #if targetEnvironment(simulator)
@@ -236,11 +159,185 @@ class Tests: XCTestCase {
         
     }
     
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure() {
-            // Put the code you want to measure the time of here.
+    func testSensorFrequency(){
+        
+        #if targetEnvironment(simulator)
+        print("This test requires a real Gyroscope.")
+        
+        #else
+        /////////// 10 FPS //////
+        let sensor = GyroscopeSensor.init(GyroscopeSensor.Config().apply{ config in
+            config.debug = true
+            config.dbType = .REALM
+            config.frequency = 10
+            config.period = 1.0/10.0
+            config.dbPath = "sensor_frequency"
+        })
+        
+        if let engine = sensor.dbEngine {
+            engine.removeAll(GyroscopeData.self)
         }
+        
+        let expect = expectation(description: "Frequency Test (10FPS)")
+        let center = NotificationCenter.default
+        let observer = center.addObserver(forName: Notification.Name.actionAwareGyroscope,
+                                          object: sensor,
+                                          queue: .main) { (notification) in
+                                            if let engine = sensor.dbEngine {
+                                                engine.fetch(GyroscopeData.self, nil){ (resultsObject, error) in
+                                                    if let results = resultsObject as? Results<Object> {
+                                                        print("ideal count = ",sensor.CONFIG.frequency)
+                                                        print("real count  = ",results.count)
+                                                        if results.count > 0 {
+                                                            if results.count >= sensor.CONFIG.frequency-1 &&
+                                                                results.count <= (sensor.CONFIG.frequency+1) {
+                                                                expect.fulfill()
+                                                            }else{
+                                                                XCTFail()
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+        }
+        
+        sensor.start() // start sensor
+        
+        wait(for: [expect], timeout: 20)
+        NotificationCenter.default.removeObserver(observer)
+        sensor.stop()
+        
+        #endif
+    }
+    
+    
+    
+    
+    
+    func testSyncModule(){
+        #if targetEnvironment(simulator)
+        
+        print("This test requires a real Gyroscope.")
+        
+        #else
+        // success //
+        let sensor = GyroscopeSensor.init(GyroscopeSensor.Config().apply{ config in
+            config.debug = true
+            config.dbType = .REALM
+            config.dbHost = "node.awareframework.com:1001"
+            config.dbPath = "sync_db"
+        })
+        if let engine = sensor.dbEngine as? RealmEngine {
+            engine.removeAll(GyroscopeData.self)
+            for _ in 0..<100 {
+                engine.save(GyroscopeData())
+            }
+        }
+        let successExpectation = XCTestExpectation(description: "success sync")
+        let observer = NotificationCenter.default.addObserver(forName: Notification.Name.actionAwareGyroscopeSyncCompletion,
+                                                              object: sensor, queue: .main) { (notification) in
+                                                                if let userInfo = notification.userInfo{
+                                                                    if let status = userInfo["status"] as? Bool {
+                                                                        if status == true {
+                                                                            successExpectation.fulfill()
+                                                                        }
+                                                                    }
+                                                                }
+        }
+        sensor.sync(force: true)
+        wait(for: [successExpectation], timeout: 20)
+        NotificationCenter.default.removeObserver(observer)
+        
+        ////////////////////////////////////
+        
+        // failure //
+        let sensor2 = GyroscopeSensor.init(GyroscopeSensor.Config().apply{ config in
+            config.debug = true
+            config.dbType = .REALM
+            config.dbHost = "node.awareframework.com.com" // wrong url
+            config.dbPath = "sync_db"
+        })
+        let failureExpectation = XCTestExpectation(description: "failure sync")
+        let failureObserver = NotificationCenter.default.addObserver(forName: Notification.Name.actionAwareGyroscopeSyncCompletion,
+                                                                     object: sensor2, queue: .main) { (notification) in
+                                                                        if let userInfo = notification.userInfo{
+                                                                            if let status = userInfo["status"] as? Bool {
+                                                                                if status == false {
+                                                                                    failureExpectation.fulfill()
+                                                                                }
+                                                                            }
+                                                                        }
+        }
+        if let engine = sensor2.dbEngine as? RealmEngine {
+            engine.removeAll(GyroscopeData.self)
+            for _ in 0..<100 {
+                engine.save(GyroscopeData())
+            }
+        }
+        sensor2.sync(force: true)
+        wait(for: [failureExpectation], timeout: 20)
+        NotificationCenter.default.removeObserver(failureObserver)
+        
+        #endif
+    }
+    
+    //////////// storage ///////////
+    var realmToken:NotificationToken? = nil
+    
+    func testSensorModule(){
+        
+        #if targetEnvironment(simulator)
+
+        print("This test requires a real Gyroscope.")
+
+        #else
+        
+        let sensor = GyroscopeSensor.init(GyroscopeSensor.Config().apply{ config in
+            config.debug = true
+            config.dbType = .REALM
+            config.dbPath = "sensor_module"
+            config.period = 1.0/60.0
+        })
+        let expect = expectation(description: "sensor module")
+        if let realmEngine = sensor.dbEngine as? RealmEngine {
+            // remove old data
+            realmEngine.removeAll(GyroscopeData.self)
+            // get a RealmEngine Instance
+            if let realm = realmEngine.getRealmInstance() {
+                // set Realm DB observer
+                realmToken = realm.observe { (notification, realm) in
+                    switch notification {
+                    case .didChange:
+                        // check database size
+                        let results = realm.objects(GyroscopeData.self)
+                        print(results.count)
+                        XCTAssertGreaterThanOrEqual(results.count, 1)
+                        realm.invalidate()
+                        expect.fulfill()
+                        self.realmToken = nil
+                        break;
+                    case .refreshRequired:
+                        break;
+                    }
+                }
+            }
+        }
+        
+        let storageExpect = expectation(description: "sensor storage notification")
+        var token: NSObjectProtocol?
+        token = NotificationCenter.default.addObserver(forName: Notification.Name.actionAwareGyroscope,
+                                                       object: sensor,
+                                                       queue: .main) { (notification) in
+                                                        storageExpect.fulfill()
+                                                        NotificationCenter.default.removeObserver(token!)
+        }
+        
+        sensor.start() // start sensor
+        
+        wait(for: [expect,storageExpect], timeout: 65)
+        sensor.stop()
+        
+        #endif
     }
     
 }
