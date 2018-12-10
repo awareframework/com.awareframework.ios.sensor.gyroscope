@@ -126,6 +126,7 @@ public class GyroscopeSensor: AwareSensor {
                     data.y = gyroData.rotationRate.y
                     data.z = gyroData.rotationRate.z
                     data.eventTimestamp = Int64(gyroData.timestamp*1000)
+                    data.label = self.CONFIG.label
                 
                     if let observer = self.CONFIG.sensorObserver {
                         observer.onDataChanged(data: data)
