@@ -23,20 +23,20 @@ public protocol GyroscopeObserver{
 }
 
 public extension GyroscopeSensor{
-    public static let TAG = "AWARE::Gyroscope"
+    static let TAG = "AWARE::Gyroscope"
     
-    public static let ACTION_AWARE_GYROSCOPE = "ACTION_AWARE_GYROSCOPE"
+    static let ACTION_AWARE_GYROSCOPE = "ACTION_AWARE_GYROSCOPE"
     
-    public static let ACTION_AWARE_GYROSCOPE_START = "com.awareframework.ios.sensor.gyroscope.SENSOR_START"
-    public static let ACTION_AWARE_GYROSCOPE_STOP = "com.awareframework.ios.sensor.gyroscope.SENSOR_STOP"
+    static let ACTION_AWARE_GYROSCOPE_START = "com.awareframework.ios.sensor.gyroscope.SENSOR_START"
+    static let ACTION_AWARE_GYROSCOPE_STOP = "com.awareframework.ios.sensor.gyroscope.SENSOR_STOP"
     
-    public static let ACTION_AWARE_GYROSCOPE_SET_LABEL = "com.awareframework.ios.sensor.gyroscope.ACTION_AWARE_GYROSCOPE_SET_LABEL"
-    public static let EXTRA_LABEL = "label"
+    static let ACTION_AWARE_GYROSCOPE_SET_LABEL = "com.awareframework.ios.sensor.gyroscope.ACTION_AWARE_GYROSCOPE_SET_LABEL"
+    static let EXTRA_LABEL = "label"
     
-    public static let ACTION_AWARE_GYROSCOPE_SYNC = "com.awareframework.ios.sensor.gyroscope.SENSOR_SYNC"
-    public static let ACTION_AWARE_GYROSCOPE_SYNC_COMPLETION = "com.awareframework.ios.sensor.gyroscope.SENSOR_SYNC_COMPLETION"
-    public static let EXTRA_STATUS = "status"
-    public static let EXTRA_ERROR = "error"
+    static let ACTION_AWARE_GYROSCOPE_SYNC = "com.awareframework.ios.sensor.gyroscope.SENSOR_SYNC"
+    static let ACTION_AWARE_GYROSCOPE_SYNC_COMPLETION = "com.awareframework.ios.sensor.gyroscope.SENSOR_SYNC_COMPLETION"
+    static let EXTRA_STATUS = "status"
+    static let EXTRA_ERROR = "error"
 }
 
 public class GyroscopeSensor: AwareSensor {
