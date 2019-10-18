@@ -42,8 +42,8 @@ public extension GyroscopeSensor{
 public class GyroscopeSensor: AwareSensor {
     
     public var CONFIG = GyroscopeSensor.Config()
-    var motion = CMMotionManager()
-    var LAST_DATA:CMGyroData?
+    public var motion = CMMotionManager()
+    public var LAST_DATA:CMGyroData?
     var LAST_TS:Double   = Date().timeIntervalSince1970
     var LAST_SAVE:Double = Date().timeIntervalSince1970
     public var dataBuffer = Array<GyroscopeData>()
