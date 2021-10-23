@@ -289,10 +289,8 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-com.awareframework.ios.sensor.gyroscope_Example/Pods-com.awareframework.ios.sensor.gyroscope_Example-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-com.awareframework.ios.sensor.gyroscope_Example/Pods-com.awareframework.ios.sensor.gyroscope_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Networking/Networking.framework",
 				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
@@ -302,8 +300,6 @@
 				"${BUILT_PRODUCTS_DIR}/com.awareframework.ios.sensor.gyroscope/com_awareframework_ios_sensor_gyroscope.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Networking.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
@@ -315,7 +311,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-com.awareframework.ios.sensor.gyroscope_Example/Pods-com.awareframework.ios.sensor.gyroscope_Example-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-com.awareframework.ios.sensor.gyroscope_Example/Pods-com.awareframework.ios.sensor.gyroscope_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		EDFB771E9A3D021DFA97592D /* [CP] Check Pods Manifest.lock */ = {
