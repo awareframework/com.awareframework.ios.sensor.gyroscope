@@ -7,7 +7,7 @@
 
 import UIKit
 import CoreMotion
-import com_awareframework_ios_sensor_core
+import com_awareframework_ios_core
 
 extension Notification.Name{
     public static let actionAwareGyroscope         = Notification.Name(GyroscopeSensor.ACTION_AWARE_GYROSCOPE)
@@ -47,6 +47,13 @@ public class GyroscopeSensor: AwareSensor {
     var LAST_TS:Double   = Date().timeIntervalSince1970
     var LAST_SAVE:Double = Date().timeIntervalSince1970
     public var dataBuffer = Array<GyroscopeData>()
+    private let motionQueue: OperationQueue = {
+        let queue = OperationQueue()
+        queue.name = "com.awareframework.ios.sensor.gyroscope.motion.queue"
+        queue.maxConcurrentOperationCount = 1
+        queue.qualityOfService = .userInitiated
+        return queue
+    }()
     
     public class Config:SensorConfig{
         /**
@@ -101,7 +108,7 @@ public class GyroscopeSensor: AwareSensor {
     public override func start() {
         if self.motion.isGyroAvailable {
             self.motion.gyroUpdateInterval = 1.0/Double(CONFIG.frequency)
-            self.motion.startGyroUpdates(to: .main) { (gyroScopeData, error) in
+            self.motion.startGyroUpdates(to: motionQueue) { (gyroScopeData, error) in
                 if let gyroData = gyroScopeData{
                     let x = gyroData.rotationRate.x
                     let y = gyroData.rotationRate.y
@@ -120,7 +127,7 @@ public class GyroscopeSensor: AwareSensor {
                     let currentTime:Double = Date().timeIntervalSince1970
                     self.LAST_TS = currentTime
                     
-                    let data = GyroscopeData()
+                    var data = GyroscopeData()
                     data.timestamp = Int64(currentTime*1000)
                     data.x = gyroData.rotationRate.x
                     data.y = gyroData.rotationRate.y
@@ -168,6 +175,7 @@ public class GyroscopeSensor: AwareSensor {
         if self.motion.isGyroAvailable{
             if self.motion.isGyroActive{
                 self.motion.stopGyroUpdates()
+                self.motionQueue.cancelAllOperations()
                 if self.CONFIG.debug{ print(GyroscopeSensor.TAG, "Gyroscope sensor terminated") }
                 self.notificationCenter.post(name: .actionAwareGyroscopeStop, object: self)
             }
@@ -176,7 +184,7 @@ public class GyroscopeSensor: AwareSensor {
     
     public override func sync(force: Bool = false) {
         if let engine = self.dbEngine{
-            engine.startSync(GyroscopeData.TABLE_NAME, GyroscopeData.self, DbSyncConfig.init().apply{ config in
+            engine.startSync(DbSyncConfig.init().apply{ config in
                 config.debug = self.CONFIG.debug
                 config.dispatchQueue = DispatchQueue(label: "com.awareframework.ios.sensor.gyroscope.sync.queue")
                 config.completionHandler = { (status, error) in

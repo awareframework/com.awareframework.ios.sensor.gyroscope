@@ -12,33 +12,15 @@ This sensor module allows us to retrieve data from the onboard gyroscopes. The d
 ## Requirements
 iOS 13 or later
 
-
 ## Installation
 
-You can integrate this framework into your project via Swift Package Manager (SwiftPM) or CocoaPods.
-
-### SwiftPM
 1. Open Package Manager Windows
     * Open `Xcode` -> Select `Menu Bar` -> `File` -> `App Package Dependencies...` 
 
 2. Find the package using the manager
-    * Select `Search Package URL` and type `git@github.com:awareframework/com.awareframework.ios.sensor.gryoscope.git`
+    * Select `Search Package URL` and type `https://github.com/awareframework/com.awareframework.ios.sensor.gyroscope.git`
 
 3. Import the package into your target.
-
-### CocoaPods
-
-com.awareframework.ios.sensor.gyroscope is available through [CocoaPods](https://cocoapods.org). 
-
-1. To install it, simply add the following line to your Podfile:
-```ruby
-pod 'com.awareframework.ios.sensor.gyroscope'
-```
-
-2. Import com.awareframework.ios.sensor.gyroscope library into your source code.
-```swift
-import com_awareframework_ios_sensor_gyroscope
-```
 
 ## Public functions
 
@@ -120,7 +102,7 @@ Yuuki Nishiyama (The University of Tokyo), nishiyama@csis.u-tokyo.ac.jp
 
 ## License
 
-Copyright (c) 2021 AWARE Mobile Context Instrumentation Middleware/Framework (http://www.awareframework.com)
+Copyright (c) 2025 AWARE Mobile Context Instrumentation Middleware/Framework (http://www.awareframework.com)
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
