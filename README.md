@@ -67,17 +67,19 @@ Class to hold the configuration of the sensor.
 
 Contains the raw sensor data.
 
-| Field     | Type   | Description                                                     |
-| --------- | ------ | --------------------------------------------------------------- |
-| x         | Double  | The value for the X-axis.                                                |
-| y         | Double  | The value for the Y-axis.                                            |
-| z         | Double  | The value for the Z-axis.                                               |
-| label     | String | Customizable label. Useful for data calibration or traceability |
-| deviceId  | String | AWARE device UUID                                               |
-| label     | String | Customizable label. Useful for data calibration or traceability |
-| timestamp | Int64   | unixtime milliseconds since 1970                                |
-| timezone  | Int    | Raw timezone offset of the device                          |
-| os        | String | Operating system of the device (ex. ios)                    |
+| Field          | Type   | Description                                                     |
+| -------------- | ------ | --------------------------------------------------------------- |
+| x              | Double | The rotation rate around the X-axis (rad/s).                    |
+| y              | Double | The rotation rate around the Y-axis (rad/s).                    |
+| z              | Double | The rotation rate around the Z-axis (rad/s).                    |
+| eventTimestamp | Int64  | Unixtime milliseconds of the actual sensor event                |
+| accuracy       | Int    | Accuracy of the sensor data                                     |
+| label          | String | Customizable label. Useful for data calibration or traceability |
+| deviceId       | String | AWARE device UUID                                               |
+| timestamp      | Int64  | unixtime milliseconds since 1970                                |
+| timezone       | Int    | Raw timezone offset of the device                               |
+| os             | String | Operating system of the device (ex. ios)                        |
+| jsonVersion    | Int    | JSON schema version                                             |
 
 ## Example usage
 ```swift
