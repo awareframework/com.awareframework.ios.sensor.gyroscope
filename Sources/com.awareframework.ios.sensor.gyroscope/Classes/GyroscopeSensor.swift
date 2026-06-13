@@ -57,6 +57,7 @@ public class GyroscopeSensor: AwareSensor {
     public var LAST_DATA: CMGyroData?
     var LAST_TS: Double = Date().timeIntervalSince1970
     var LAST_SAVE: Double = Date().timeIntervalSince1970
+    private var bootReferenceTime: Double = 0
     public var dataBuffer = [GyroscopeData]()
     private let motionQueue: OperationQueue = {
         let queue = OperationQueue()
@@ -121,6 +122,7 @@ public class GyroscopeSensor: AwareSensor {
 
     public override func start() {
         if self.motion.isGyroAvailable {
+            bootReferenceTime = Date().timeIntervalSince1970 - ProcessInfo.processInfo.systemUptime
             self.motion.gyroUpdateInterval = 1.0 / Double(CONFIG.frequency)
             self.motion.startGyroUpdates(to: motionQueue) { (gyroScopeData, error) in
                 if let gyroData = gyroScopeData {
@@ -147,7 +149,7 @@ public class GyroscopeSensor: AwareSensor {
                     data.x = gyroData.rotationRate.x
                     data.y = gyroData.rotationRate.y
                     data.z = gyroData.rotationRate.z
-                    data.eventTimestamp = Int64(gyroData.timestamp * 1000)
+                    data.eventTimestamp = Int64((self.bootReferenceTime + gyroData.timestamp) * 1000)
                     data.label = self.CONFIG.label
 
                     if let observer = self.CONFIG.sensorObserver {
