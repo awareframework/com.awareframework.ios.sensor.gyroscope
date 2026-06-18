@@ -72,8 +72,8 @@ public class GyroscopeSensor: AwareSensor {
          * The defualt value of Android is 200000 microsecond.
          * The value means 5Hz
          */
-        public var frequency: Int = 5  // Hz
-        public var period: Double = 1  // min
+        public var samplingFrequencyHz: Int = 5  // Hz
+        public var saveIntervalSeconds: Double = 60
         /**
          * Accelerometer threshold (Double).  Do not record consecutive points if
          * change in value of all axes is less than this.
@@ -86,12 +86,12 @@ public class GyroscopeSensor: AwareSensor {
 
             super.set(config: config)
 
-            if let frequency = config["frequency"] as? Int {
-                self.frequency = frequency
+            if let samplingFrequencyHz = config["samplingFrequencyHz"] as? Int {
+                self.samplingFrequencyHz = samplingFrequencyHz
             }
 
-            if let period = config["period"] as? Double {
-                self.period = period
+            if let saveIntervalSeconds = config["saveIntervalSeconds"] as? Double {
+                self.saveIntervalSeconds = saveIntervalSeconds
             }
 
             if let threshold = config["threshold"] as? Double {
@@ -123,7 +123,7 @@ public class GyroscopeSensor: AwareSensor {
     public override func start() {
         if self.motion.isGyroAvailable {
             bootReferenceTime = Date().timeIntervalSince1970 - ProcessInfo.processInfo.systemUptime
-            self.motion.gyroUpdateInterval = 1.0 / Double(CONFIG.frequency)
+            self.motion.gyroUpdateInterval = 1.0 / Double(CONFIG.samplingFrequencyHz)
             self.motion.startGyroUpdates(to: motionQueue) { (gyroScopeData, error) in
                 if let gyroData = gyroScopeData {
                     let x = gyroData.rotationRate.x
@@ -158,8 +158,8 @@ public class GyroscopeSensor: AwareSensor {
 
                     self.dataBuffer.append(data)
 
-                    if self.dataBuffer.count < Int(self.CONFIG.frequency)
-                        && currentTime < self.LAST_SAVE + (self.CONFIG.period * 60)
+                    if self.dataBuffer.count < Int(self.CONFIG.samplingFrequencyHz)
+                        && currentTime < self.LAST_SAVE + (self.CONFIG.saveIntervalSeconds)
                     {
                         return
                     }
@@ -188,7 +188,7 @@ public class GyroscopeSensor: AwareSensor {
             }
 
             if self.CONFIG.debug {
-                print(GyroscopeSensor.TAG, "Gyroscope sensor active: \(self.CONFIG.frequency) hz")
+                print(GyroscopeSensor.TAG, "Gyroscope sensor active: \(self.CONFIG.samplingFrequencyHz) hz")
             }
             self.notificationCenter.post(name: .actionAwareGyroscopeStart, object: self)
         }

@@ -33,17 +33,17 @@ final class Tests: XCTestCase {
     }
 
     func testConfig() {
-        let frequency = 10
+        let samplingFrequencyHz = 10
         var sensor = GyroscopeSensor(GyroscopeSensor.Config())
-        XCTAssertEqual(sensor.CONFIG.frequency, 5)
+        XCTAssertEqual(sensor.CONFIG.samplingFrequencyHz, 5)
 
         sensor = GyroscopeSensor(GyroscopeSensor.Config().apply { config in
-            config.frequency = frequency
+            config.samplingFrequencyHz = samplingFrequencyHz
         })
-        XCTAssertEqual(sensor.CONFIG.frequency, frequency)
+        XCTAssertEqual(sensor.CONFIG.samplingFrequencyHz, samplingFrequencyHz)
 
-        sensor = GyroscopeSensor(GyroscopeSensor.Config(["frequency": frequency]))
-        XCTAssertEqual(sensor.CONFIG.frequency, frequency)
+        sensor = GyroscopeSensor(GyroscopeSensor.Config(["samplingFrequencyHz": samplingFrequencyHz]))
+        XCTAssertEqual(sensor.CONFIG.samplingFrequencyHz, samplingFrequencyHz)
     }
 
     func testGyroscopeData() {

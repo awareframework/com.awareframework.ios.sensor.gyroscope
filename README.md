@@ -2,7 +2,7 @@
 
 [![Swift Package Manager compatible](https://img.shields.io/badge/Swift%20Package%20Manager-compatible-brightgreen.svg)](https://github.com/apple/swift-package-manager)
 
-This sensor module allows us to retrieve data from the onboard gyroscopes. The data is provided by iOS Core Motion Library. Please check the link below for details. 
+This sensor module allows us to retrieve data from the onboard gyroscopes. The data is provided by iOS Core Motion Library. Please check the link below for details.
 
 > A gyroscope measures the rate at which a device rotates around a spatial axis. Many iOS devices have a three-axis gyroscope, which delivers rotation values in each of the three axes. Rotation values are measured in radians per second around the given axis. Rotation values may be positive or negative depending on the direction of rotation.
 
@@ -15,18 +15,18 @@ iOS 13 or later
 ## Installation
 
 1. Open Package Manager Windows
-    * Open `Xcode` -> Select `Menu Bar` -> `File` -> `App Package Dependencies...` 
+    * Open `Xcode` -> Select `Menu Bar` -> `File` -> `App Package Dependencies...`
 
 2. Find the package using the manager
     * Select `Search Package URL` and type `https://github.com/awareframework/com.awareframework.ios.sensor.gyroscope.git`
 
 3. Import the package into your target.
 
-## Public functions
+## Public Functions
 
 ### GyroscopeSensor
 
-+ `init(config:GyroscopeSensor.Config?)` : Initializes the gyroscope sensor with the optional configuration.
++ `init(config:GyroscopeSensor.Config?)`: Initializes the gyroscope sensor with the optional configuration.
 + `start()`: Starts the gyroscope sensor with the optional configuration.
 + `stop()`: Stops the service.
 
@@ -35,24 +35,25 @@ iOS 13 or later
 Class to hold the configuration of the sensor.
 
 #### Fields
+
 + `sensorObserver: GyroscopeObserver`: Callback for live data updates.
-+ `frequency: Int`: Data samples to collect per second (Hz). (default = 5)
-+ `period: Double`: Period to save data in minutes. (default = 1)
++ `samplingFrequencyHz: Int`: Data samples to collect per second (Hz). (default = `5`)
++ `saveIntervalSeconds: Double`: Interval in seconds at which buffered data is saved to the database. (default = `60`)
 + `threshold: Double`: If set, do not record consecutive points if change in value is less than the set value.
-+ `enabled: Boolean` Sensor is enabled or not. (default = `false`)
-+ `debug: Boolean` enable/disable logging to Xcode console. (default = `false`)
-+ `label: String` Label for the data. (default = "")
-+ `deviceId: String` Id of the device that will be associated with the events and the sensor. (default = "")
-+ `dbEncryptionKey` Encryption key for the database. (default = `null`)
-+ `dbType: Engine` Which db engine to use for saving data. (default = `Engine.DatabaseType.NONE`)
-+ `dbPath: String` Path of the database. (default = "aware_gyroscope")
-+ `dbHost: String` Host for syncing the database. (default = `null`)
++ `enabled: Bool`: Sensor is enabled or not. (default = `false`)
++ `debug: Bool`: Enable/disable logging. (default = `false`)
++ `label: String`: Label for the data. (default = `""`)
++ `deviceId: String`: Id of the device that will be associated with the events and the sensor. (default = `""`)
++ `dbEncryptionKey: String?`: Encryption key for the database. (default = `nil`)
++ `dbType: DatabaseType`: Which db engine to use for saving data. (default = `.none`)
++ `dbPath: String`: Path of the database. (default = `"aware_gyroscope"`)
++ `dbHost: String?`: Host for syncing the database. (default = `nil`)
 
 ## Broadcasts
 
 ### Fired Broadcasts
 
-+ `GyroscopeSensor.ACTION_AWARE_GYROSCOPE` fired when gyroscope saved data to db after the period ends.
++ `GyroscopeSensor.ACTION_AWARE_GYROSCOPE`: fired when gyroscope saved data to db after the save interval ends.
 
 ### Received Broadcasts
 
@@ -81,9 +82,9 @@ Contains the raw sensor data.
 | os             | String | Operating system of the device (ex. ios)                        |
 | jsonVersion    | Int    | JSON schema version                                             |
 
-## Example usage
+## Example Usage
 ```swift
-let gyroSensor = GyroscopeSensor.init(GyroscopeSensor.Config().apply{ config in
+let gyroSensor = GyroscopeSensor.init(GyroscopeSensor.Config().apply { config in
     config.debug = true
     config.sensorObserver = Observer()
 })
