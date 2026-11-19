@@ -72,6 +72,18 @@ public class GyroscopeSensor: AwareSensor {
     private let saveQueue = DispatchQueue(label: "com.awareframework.ios.sensor.gyroscope.save", qos: .utility)
 
     public class Config: SensorConfig {
+
+        /// The default database file. Up to 1.6.2 the sensor used the shared default `aware`
+        /// (`aware.sqlite`), although the README said `aware_gyroscope`.
+        public static let defaultDbPath = "aware_gyroscope"
+        /// Where the gyroscope table was kept up to 1.6.2
+        static let previousDbPath = "aware"
+
+        public override init() {
+            super.init()
+            dbTableName = GyroscopeData.databaseTableName
+            dbPath = Config.defaultDbPath
+        }
         /**
          * The defualt value of Android is 200000 microsecond.
          * The value means 5Hz
@@ -114,10 +126,37 @@ public class GyroscopeSensor: AwareSensor {
         self.init(GyroscopeSensor.Config())
     }
 
+
+    /// Creates this sensor's table if it does not exist yet, so that the first save does not fail.
+    /// Failures are logged: without the table, the data cannot be saved or uploaded.
+    private func initializeTables() {
+        guard CONFIG.dbType == .sqlite else { return }
+        guard let queue = (dbEngine as? SQLiteEngine)?.getSQLiteInstance() else {
+            print(GyroscopeSensor.TAG, "[Error] Cannot open the database '\(CONFIG.dbPath)'. The table is not created.")
+            return
+        }
+        let tables: [(name: String, create: () throws -> Void)] = [
+            (GyroscopeData.databaseTableName, { try GyroscopeData.createTable(queue: queue) }),
+        ]
+        for table in tables {
+            do {
+                try table.create()
+            } catch {
+                print(GyroscopeSensor.TAG, "[Error] Cannot create the table '\(table.name)': \(error)")
+            }
+        }
+    }
+
     public init(_ config: GyroscopeSensor.Config) {
         super.init()
         self.CONFIG = config
         self.initializeDbEngine(config: config)
+        initializeTables()
+        // Rows saved by 1.6.2 or earlier in aware.sqlite and not uploaded yet move here, so they are
+        // still uploaded. Nothing happens when there is nothing to move.
+        if config.dbPath == Config.defaultDbPath, let engine = dbEngine as? SQLiteEngine {
+            engine.moveTable(GyroscopeData.databaseTableName, fromDatabaseAt: Config.previousDbPath)
+        }
         super.syncConfig = DbSyncConfig().apply { c in
             c.dispatchQueue = DispatchQueue(label: "com.awareframework.ios.sensor.gyroscope.sync.queue")
         }

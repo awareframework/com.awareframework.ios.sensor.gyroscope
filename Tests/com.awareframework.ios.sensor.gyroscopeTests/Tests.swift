@@ -54,4 +54,45 @@ final class Tests: XCTestCase {
         XCTAssertEqual(dict["z"] as? Double, 3)
         XCTAssertEqual(dict["timestamp"] as? Int64, 4)
     }
+
+    /// The sensor creates its own table: rows can be saved and read back for sync without the app
+    /// creating the table (it used to be missing, so every save failed and nothing was synced)
+    func testSensorCreatesItsTable() {
+        let sensor = GyroscopeSensor(GyroscopeSensor.Config().apply { config in
+            config.dbPath = "create_table_test_\(UUID().uuidString)"
+        })
+        XCTAssertEqual(sensor.CONFIG.dbTableName, GyroscopeData.databaseTableName)
+        guard let engine = sensor.dbEngine else { return XCTFail("no engine") }
+        let saved = expectation(description: "saved")
+        engine.save([GyroscopeData()]) { error in
+            XCTAssertNil(error)
+            saved.fulfill()
+        }
+        wait(for: [saved], timeout: 5)
+        XCTAssertEqual(engine.count(filter: nil), 1)
+        XCTAssertEqual(engine.fetch(filter: nil, limit: nil)?.count, 1, "rows can be read for sync")
+    }
+
+    /// Up to 1.6.2 the table was in aware.sqlite. Rows not uploaded yet move to aware_gyroscope.sqlite
+    func testRowsInThePreviousDatabaseMove() throws {
+        func engine(_ path: String) throws -> SQLiteEngine {
+            let e = try XCTUnwrap(Engine.Builder().setPath(path).setType(.sqlite)
+                .setTableName(GyroscopeData.databaseTableName).build() as? SQLiteEngine)
+            try GyroscopeData.createTable(queue: try XCTUnwrap(e.getSQLiteInstance()))
+            return e
+        }
+        let old = try engine("aware")
+        let saved = expectation(description: "saved")
+        old.save([GyroscopeData(), GyroscopeData(), GyroscopeData()]) { error in
+            XCTAssertNil(error)
+            saved.fulfill()
+        }
+        wait(for: [saved], timeout: 5)
+        let before = try engine(GyroscopeSensor.Config.defaultDbPath).count(filter: nil)
+
+        let sensor = GyroscopeSensor()
+        XCTAssertEqual(sensor.CONFIG.dbPath, "aware_gyroscope")
+        XCTAssertEqual(sensor.dbEngine?.count(filter: nil), before + 3, "the rows moved")
+        XCTAssertFalse(try old.getAllTableNames().contains(GyroscopeData.databaseTableName), "the old table is dropped")
+    }
 }
