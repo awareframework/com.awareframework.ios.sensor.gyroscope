@@ -1,13 +1,13 @@
 {
-  "originHash" : "2f31d092d71f86bd5c387f4fb76554b8a3fcf47eed502c3df8cbb88948b450d6",
+  "originHash" : "f4999362127ebc3eacd19111c6f18ee747339a550da9cc2b2600331e1ad9e39b",
   "pins" : [
     {
       "identity" : "com.awareframework.ios.core",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/awareframework/com.awareframework.ios.core.git",
       "state" : {
-        "revision" : "fda6fca932a93b4bbf584c131f0130ac15901f0a",
-        "version" : "1.6.0"
+        "revision" : "e3cd943f63bcf6aafb7534d6f2c2ca76b5fa18fd",
+        "version" : "1.7.1"
       }
     },
     {
